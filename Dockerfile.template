@@ -20,35 +20,35 @@ ENV DEBIAN_FRONTEND noninteractive
 # refreshes the local cache of what software is available to install
 # and then apt-get install pulls down packages and installs them.
 RUN apt-get update -q && apt-get install -qy \
-                            autoconf\
-                            bison\
-                            build-essential\
-                            curl \
-                            g++ \
-                            gcc \
-                            git \
-                            gnupg2 \
-                            libffi-dev \
-                            libgconf-2-4 \
-                            libgdbm-dev \
-                            libncurses5-dev \
-                            libpq-dev \
-                            libreadline-dev \
-                            libsqlite3-dev \
-                            libssl-dev \
-                            libxi6 \
-                            libyaml-dev \
-                            make \
-                            man \
-                            netcat \
-                            rsync \
-                            software-properties-common\
-                            sqlite3 \
-                            tzdata \
-                            wget \
-                            xvfb \
-                            zip \
-                            zlib1g-dev
+    autoconf\
+    bison\
+    build-essential\
+    curl \
+    g++ \
+    gcc \
+    git \
+    gnupg2 \
+    libffi-dev \
+    libgconf-2-4 \
+    libgdbm-dev \
+    libncurses5-dev \
+    libpq-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    libssl-dev \
+    libxi6 \
+    libyaml-dev \
+    make \
+    man \
+    netcat \
+    rsync \
+    software-properties-common\
+    sqlite3 \
+    tzdata \
+    wget \
+    xvfb \
+    zip \
+    zlib1g-dev
 
 # In order to use Postgres 12, we have to add their package repo to install it from there.
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |tee  /etc/apt/sources.list.d/pgdg.list && apt-get update && apt-get install -y postgresql-client-12
@@ -88,7 +88,7 @@ RUN wget -O ruby-install-${ruby_installer_version}.tar.gz https://github.com/pos
 # This is a separate run command because we might
 # want to change Ruby versions locally, but we *don't* what to have
 # to re-download and install ruby-install if we can help it.
-RUN ruby-install --system ruby 3.0.2
+RUN ruby-install --system ruby 2.7.1
 
 # OMG SO. MANY. DEPRECATION. WARNINGS. I. DO. NOT. CARE.
 ENV RUBYOPT=-W:no-deprecated
@@ -108,7 +108,7 @@ RUN gem install bundler && bundle config path /usr/dependencies-cache/bundler
 #
 # While we're doing that, we might as well create a new rails app and bundle
 # install it so we get the base gems inside this docker file
-RUN echo "gem: --no-document" >> ~/.gemrc && echo "set -o vi" >> ~/.bashrc && gem install rails --version ">= 6.1" && cd /usr/dependencies-cache && rails new empty-rails-app --force --database=postgresql --skip-webpack-install --skip-bundle && cd empty-rails-app && bundle update
+RUN echo "gem: --no-document" >> ~/.gemrc && echo "set -o vi" >> ~/.bashrc && gem install rails --version "6.1.0" && cd /usr/dependencies-cache && rails new empty-rails-app --force --database=postgresql --skip-webpack-install --skip-bundle && cd empty-rails-app && bundle update
 
 
 # This sets up the locale to be American English, using
